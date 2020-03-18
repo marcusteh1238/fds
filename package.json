@@ -1,0 +1,19 @@
+{
+  "name": "fds",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcusteh1238/fds.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcusteh1238/fds/issues"
+  },
+  "homepage": "https://github.com/marcusteh1238/fds#readme"
+}
