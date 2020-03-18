@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/marcusteh1238/fds/issues"
   },
-  "homepage": "https://github.com/marcusteh1238/fds#readme"
+  "homepage": "https://github.com/marcusteh1238/fds#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
