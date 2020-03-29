@@ -52,13 +52,25 @@ module.exports = {
 
 
     /* View total number of orders delivered by a rider for a month */
-    get_total_order_delivered_by_rider: 'SELECT count(*) FROM Orders WHERE riderId = ${riderId} AND timeOrderPlaced >= $1 AND o.timeOrderPlaced < $2',
+    get_total_order_delivered_by_rider: 'SELECT count(*) FROM Orders WHERE riderId = $1 AND timeOrderPlaced >= $2 AND o.timeOrderPlaced < $3',
 
     /* View total number of hours worked by a rider for a month */
     get_total_hours_worked_by_rider: 'SELECT count(*) FROM Orders WHERE riderId = $1 AND timeOrderPlaced >= $2 AND o.timeOrderPlaced < $3 AND rating IS NOT NULL',
 
     /* View average rating received by a rider for all the orders for that month */
-    get_avg_rating_for_a_rider: 'SELECT avg(rating) FROM Orders WHERE riderId = $1 AND timeOrderPlaced >= $2 AND o.timeOrderPlaced < $3 AND rating IS NOT NULL'
+    get_avg_rating_for_a_rider: 'SELECT avg(rating) FROM Orders WHERE riderId = $1 AND timeOrderPlaced >= $2 AND o.timeOrderPlaced < $3 AND rating IS NOT NULL',
 
-    /* A list of free riders currently */
+    /* A list of free riders currently 
+
+    /* Total Base salary by a part time rider with rider id  between date to date (Without the bonus for each order)  */
+    get_total_base_salary_by_part_time_rider:'SELECT baseSalary * (SELECT count(distinct week) from WorkInteval WHERE date Between $1 And $2 and rId = $3 ) AS sum FROM EmploymentType JOIN DeliveryRiders using (employmentTypeId) where rId = $3',
+    /* Total Base salary by a full time rider with rider id  between date to date */
+    get_total_base_salary_by_full_time_rider:'SELECT baseSalary * (SELECT count(distinct mwsId) from WorkInteval WHERE date Between $1 And $2 and rId = $3 ) AS sum FROM EmploymentType JOIN DeliveryRiders using (employmentTypeId) where rId = $3',
+    
+    /* Total hours worked by the rider 1 from Date 2 to Date 3 */
+    get_total_work_hour:'SELECT sum(start_time-end_time) FROM WorkInterval WHERE date BETWEEN $2 AND $3 and rId = $1'
+
+
+    
+    
 }
