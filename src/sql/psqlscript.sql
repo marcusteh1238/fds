@@ -42,15 +42,27 @@ RAddress VARCHAR(20) NOT NULL,
 PRIMARY KEY (RId)
 );
 
+CREATE TABLE employmentType{
+employmentTypeId INTEGER NOT NULL,
+employmentType VARCHAR(10) NOT NULL,
+baseSalary NUMERIC NOT NULL,
+PRIMARY KEY(employmentTypeId)
+
+};
+
 CREATE TABLE DeliveryRiders(
 rId INTEGER NOT NULL,
 name VARCHAR(10) NOT NULL,
 phoneNo INTEGER NOT NULL,
 password VARCHAR(10) NOT NULL,
 startDate Date NOT NULL,
-employmentType VARCHAR(4) NOT NULL check (employmentType in ('full','part')),
+employmentTypeId INTEGER references employmentType),
 PRIMARY KEY (rId)
 );
+
+
+
+
 CREATE TABLE FoodItemCategories (
 categoryId INTEGER,
 name VARCHAR(20) NOT NULL,
@@ -120,9 +132,12 @@ date Date NOT NULL,
 start_time TIME NOT NULL,
 end_time TIME NOT NULL,
 weekNum INTEGER NOT NULL,
-mwsID INTEGER,
+mwsId INTEGER,
 PRIMARY KEY(riderId, intervalId)    
 );
+
+
+
 
 -- TRIGGER 1: check food item limit
 CREATE OR REPLACE FUNCTION check_food_limit()
