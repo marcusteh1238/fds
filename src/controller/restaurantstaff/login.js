@@ -1,10 +1,11 @@
 const db = require('../../db')
+const { get_restaurant_staff_login } = require('../../sql/sqlScript')
 // Params: username, password
 async function loginImpl(params) {
 
     const { username, password } = params;
     
-    const response = await db.query("SELECT * FROM restaurantsstaff c WHERE c.username = $1 AND c.password = $2", [username, password])
+    const response = await db.query(get_restaurant_staff_login, [username, password])
     const rows = response.rows;
     if (rows.length < 1) {
         return {
