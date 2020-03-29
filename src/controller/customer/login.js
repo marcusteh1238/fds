@@ -1,23 +1,23 @@
 const db = require('../../db')
+const { get_customer_by_name } = require('../../sql/sqlScript')
 // Params: username, password
 async function loginImpl(params) {
 
-    const { username, password } = params;
+    const { username } = params;
     
-    const dbPass = await getCustomerFromUsername(username);
-    const isMatchingPassword = dbPass === password;
-    const res = await db.query("SELECT 1 FROM customers c WHERE c.username = $1 AND c.password = $2", [username, password], (err, res)=>{console.log(res)})
-    console.log(res)
+    const response = await db.query(get_customer_by_name, [username])
+    const rows = response.rows;
+    if (rows.length < 1) {
+        return {
+            isLoginSuccess: false
+        }
+    }
+    const user = rows[0]
     // return endpoint results
     return {
-        username: username,
-        correctPass: isMatchingPassword
+        isLoginSuccess: true,
+        user
     };
-}
-
-async function getCustomerFromUsername(username) {
-    // return db.query('BLAH')
-    return 'password'
 }
 
 module.exports.get = loginImpl;
