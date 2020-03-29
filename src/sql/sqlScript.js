@@ -23,7 +23,8 @@ module.exports = {
     get_orders_by_date: 'SELECT * FROM Orders WHERE timeRiderDeliversOrder IS BETWEEN $1 AND $2',
 
     get_rider_login: 'SELECT * FROM DeliveryRiders dr WHERE dr.username = $1 AND dr.password = $2',
-    get_FDS_Manager_login: 'SELECT * FROM FDS_Managers fm WHERE fm.username = $1 AND fm.password = $2',
+    get_FDS_Manager_login: 'SELECT * FROM FDSManagers fm WHERE fm.username = $1 AND fm.password = $2',
+    get_restaurant_staff_login: 'SELECT * FROM restaurantsstaff rs WHERE rs.username = $1 AND rs.password = $2',
 
     /*View total number of new customer for each month */
     get_total_new_customer_for_each_month: 'SELECT count(*) FROM Customers c WHERE c.joinDate >= $1 AND c.joinDate < $2',
