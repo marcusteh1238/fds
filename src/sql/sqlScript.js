@@ -25,7 +25,9 @@ module.exports = {
     // update
 
     update_FoodItem_DailyLimit:'UPDATE FoodItems SET daily_limit = $1 WHERE foodItemId = $2',
-    update_Min_Order_Amount:'UPDATE Restaurants SET minOrderPrice = $1 WHERE rId = $2'
+    update_Min_Order_Amount:'UPDATE Restaurants SET minOrderPrice = $1 WHERE rId = $2',
+    update_FoodItem:'UPDATE FoodItems SET foodName=$1, price=$2, daily_limit=$3, itemAvailability=$4, categoryId=$5 WHERE foodItemId=$6',
+    update_FoodItem_Availability:'UPDATE FoodITems SET itemAvailability='
     
 
      
