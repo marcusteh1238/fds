@@ -12,7 +12,7 @@ module.exports = {
 
     // retrieve
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
-    get_food_item_by_category: 'SELECT * FROM FoodItem WHERE categoryId = $1',
+    get_food_item_by_category: 'SELECT * FROM FoodItem WHERE categoryId = $1 and rId = $2',
     get_food_item_by_restaurants_id: 'SELECT * FROM FoodItem WHERE rid = $1',
     get_food_item_by_restaurants_name: 'SELECT * FROM FoodItem f WHERE f.rId = (select r.rId FROM Restaurants r where r.name = $1',
     get_reviews_by_restaurants_name: 'SELECT reviews FROM Orders WHERE rId = (select r.rId FROM Restaurants r where r.name = $1',
@@ -59,4 +59,5 @@ module.exports = {
     /* View average rating received by a rider for all the orders for that month */
     get_avg_rating_for_a_rider: 'SELECT avg(rating) FROM Orders WHERE riderId = $1 AND timeOrderPlaced >= $2 AND o.timeOrderPlaced < $3 AND rating IS NOT NULL'
 
+    /* A list of free riders currently 
 }
