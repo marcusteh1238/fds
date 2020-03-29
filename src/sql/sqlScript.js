@@ -60,5 +60,5 @@ module.exports = {
     /* View average rating received by a rider for all the orders for that month */
     get_avg_rating_for_a_rider: 'SELECT avg(rating) FROM Orders WHERE riderId = $1 AND timeOrderPlaced >= $2 AND o.timeOrderPlaced < $3 AND rating IS NOT NULL'
 
-    /* A list of free riders currently 
+    /* A list of free riders currently */
 }
