@@ -7,7 +7,7 @@ router.get("/login/:username/:password", async(req, res) => {
     try {
         const response = await CustomerLoginController.get(req.params);
         res.status(200).send(response);
-    } catch (err) {
+    } catch (error) {
         console.error(error);
         const errorCode = error.statusCode ? error.statusCode : 400;
         res.status(errorCode).send({
