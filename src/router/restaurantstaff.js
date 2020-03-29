@@ -1,11 +1,11 @@
 const router = require('express').Router({ mergeParams: true });
 
-const controllerPath = "../controller/customer";
-const CustomerLoginController = require(`${controllerPath}/login`);
+const controllerPath = "../controller";
+const LoginController = require(`${controllerPath}/restaurantstaff/login`);
 
 router.get("/login/:username/:password", async(req, res) => {
     try {
-        const response = await CustomerLoginController.get(req.params);
+        const response = await LoginController.get(req.params);
         res.status(200).send(response);
     } catch (err) {
         console.error(error);
