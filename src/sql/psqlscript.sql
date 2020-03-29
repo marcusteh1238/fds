@@ -18,7 +18,7 @@ username VARCHAR(10),
 password VARCHAR(10),
 rewardPoints INTEGER DEFAULT 0,
 joinDate Date NOT NULL,
-registedCreditCard INTEGER,
+registedCreditCard VARCHAR(16),
 PRIMARY KEY(cId)
 );
 
