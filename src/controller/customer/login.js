@@ -3,7 +3,7 @@ const { get_customer_by_name } = require('../../sql/sqlScript')
 // Params: username, password
 async function loginImpl(params) {
 
-    const { username } = params;
+    const { username } = params
     
     const response = await db.query(get_customer_by_name, [username])
     const rows = response.rows;
