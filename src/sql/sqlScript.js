@@ -12,6 +12,7 @@ module.exports = {
 
     // retrieve
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
+    get_customer_by_cid: 'SELECT * FROM Customers WHERE cid = $1',
     get_food_item_by_category: 'SELECT * FROM FoodItem WHERE categoryId = $1 and rId = $2',
     get_food_item_by_restaurants_id: 'SELECT * FROM FoodItem WHERE rid = $1',
     get_food_item_by_restaurants_name: 'SELECT * FROM FoodItem f WHERE f.rId = (select r.rId FROM Restaurants r where r.name = $1',
@@ -22,7 +23,7 @@ module.exports = {
     get_top_5_favourite_foodItem_by_restaurants_id: 'WITH X AS(SELECT * FROM FoodItems f WHERE f.rId = $1), Y AS (SELECT f.fId, sum(quantity) FROM X f JOIN OrderDetails od on f.foodItemId = od.fId order by f.fId Desc limit 5',
     get_orders_by_date: 'SELECT * FROM Orders WHERE timeRiderDeliversOrder IS BETWEEN $1 AND $2',
     get_all_restaurants: 'SELECT * FROM Restaurants',
-    
+
     get_rider_login: 'SELECT * FROM DeliveryRiders dr WHERE dr.username = $1 AND dr.password = $2',
     get_FDS_Manager_login: 'SELECT * FROM FDSManagers fm WHERE fm.username = $1 AND fm.password = $2',
     get_restaurant_staff_login: 'SELECT * FROM restaurantsstaff rs WHERE rs.username = $1 AND rs.password = $2',
