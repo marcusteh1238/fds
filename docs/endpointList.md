@@ -5,6 +5,10 @@
 * /customer/getCustomer/:cid
     * Gets a customer by its customer id
 
+## Rider Routes: /rider
+
+* /rider/login/:username/:password
+    * Check if username and password combo matches
 
 ## FDS Manager Routes: /fdsmanager
 
