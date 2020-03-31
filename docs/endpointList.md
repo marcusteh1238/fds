@@ -2,6 +2,8 @@
 
 * /customer/login/:username/:password
     * Check if username and password combo matches
+* /customer/getCustomer/:cid
+    * Gets a customer by its customer id
 
 
 ## FDS Manager Routes: /fdsmanager
