@@ -6,7 +6,6 @@ const { get_all_restaurants } = require('../../sql/sqlScript')
 async function getAllRestaurantsImpl(params) {
     const response = await db.query(get_all_restaurants)
     const { rows, rowCount } = response
-    console.log(rows)
     return {
         count: rowCount,
         restaurants: rows
