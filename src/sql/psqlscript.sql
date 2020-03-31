@@ -35,10 +35,10 @@ PRIMARY KEY(username)
 );
 CREATE TABLE Restaurants (
 RId INTEGER,
-RName VARCHAR(20) NOT NULL,
+RName VARCHAR(50) NOT NULL,
 minOrderPrice NUMERIC NOT NULL,
-locationArea VARCHAR(20) NOT NULL,
-RAddress VARCHAR(20) NOT NULL,
+locationArea VARCHAR(30) NOT NULL,
+RAddress VARCHAR(100) NOT NULL,
 PRIMARY KEY (RId)
 );
 
@@ -57,7 +57,7 @@ name VARCHAR(10) NOT NULL,
 phoneNo INTEGER NOT NULL,
 password VARCHAR(10) NOT NULL,
 startDate Date NOT NULL,
-employmentTypeId INTEGER references employmentType),
+employmentTypeId INTEGER references employmentType,
 PRIMARY KEY (rId)
 );
 
