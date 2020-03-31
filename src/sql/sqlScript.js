@@ -21,7 +21,8 @@ module.exports = {
     get_total_cost_of_completed_Order_by_restaurants_id: 'WITH X AS(SELECT oId FROM Orders WHERE rId = $1 ), Y AS (SELECT oId, sum(od.quantity*f.price) as sumPerOrder FROM OrderDetails od JOIN FoodItems f on od.fId = f.foodItemId WHERE fId In X ORDER BY oId) select sum(sumPerOrder) from Y',
     get_top_5_favourite_foodItem_by_restaurants_id: 'WITH X AS(SELECT * FROM FoodItems f WHERE f.rId = $1), Y AS (SELECT f.fId, sum(quantity) FROM X f JOIN OrderDetails od on f.foodItemId = od.fId order by f.fId Desc limit 5',
     get_orders_by_date: 'SELECT * FROM Orders WHERE timeRiderDeliversOrder IS BETWEEN $1 AND $2',
-
+    get_all_restaurants: 'SELECT * FROM Restaurants',
+    
     get_rider_login: 'SELECT * FROM DeliveryRiders dr WHERE dr.username = $1 AND dr.password = $2',
     get_FDS_Manager_login: 'SELECT * FROM FDSManagers fm WHERE fm.username = $1 AND fm.password = $2',
     get_restaurant_staff_login: 'SELECT * FROM restaurantsstaff rs WHERE rs.username = $1 AND rs.password = $2',
