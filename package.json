@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/marcusteh1238/fds#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "node-postgres": "^0.1.4",
