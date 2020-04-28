@@ -12,4 +12,4 @@ async function getAllRestaurantsImpl(params) {
     }
 }
 
-module.exports.get = getAllRestaurantsImpl
+module.exports.get = getAllRestaurantsImpl;

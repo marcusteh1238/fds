@@ -6,7 +6,7 @@ module.exports = {
     add_fdsManagers: 'INSERT INTO FDSManagers VALUES ($1)',
     add_deliveryDrivers: 'INSERT INTO DeliveryRiders(rId, name, phoneNo, startDate, employmentType) VALUES ($1,$2, $3,CAST (NOW() AS TIME),$5 )',
     add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME))',
-    add_Promo: 'INSERT INTO Promo(startDate, endDate, discountDate,rId) VALUES($1,$2,$3,$4)',
+    add_promo: 'INSERT INTO Promo(startDate, endDate, discountDate,rId) VALUES($1,$2,$3,$4)',
 
 
 
@@ -41,11 +41,7 @@ module.exports = {
     update_Min_Amount: 'UPDATE Restuarants SET minOrderPrice = $1 WHERE rId = $2',
     update_FoodItem: 'UPDATE FoodItems SET foodName=$1, price=$2, dailyLimit=$3, categoryId=$4 WHERE foodItemId=$5',
     update_FoodItem_Availability: 'UPDATE FoodItems SET itemAvailability = $1 WHERE foodItemId=$2',
-
-
-
-
-
+    
 
     /* View total cost of all orders for each month */
     get_total_cost_of_all_orders: 'WITH OrderSubtotal AS (SELECT o.timeRiderDeliversOrder, o.oid, CASE WHEN (o.pid IS NOT NULL) THEN (SELECT od.quantity*fi.price*p.discountRate as subTotal FROM Orders o JOIN Order_Details od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId) JOIN PROMO p USING (pid)) ELSE (SELECT od.quantity*fi.price as subTotal FROM Orders o JOIN Order_Details od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId)) END AS subTotal FROM Orders o JOIN Order_Details od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId) JOIN PROMO p USING (pid)) SELECT sum(subTotal) FROM OrderSubtotal WHERE o.timeRiderDeliversOrder BETWEEN $1 AND $2',
@@ -70,9 +66,11 @@ module.exports = {
     get_total_base_salary_by_full_time_rider:'SELECT baseSalary * (SELECT count(distinct mwsId) from WorkInteval WHERE date Between $1 And $2 and rId = $3 ) AS sum FROM EmploymentType JOIN DeliveryRiders using (employmentTypeId) where rId = $3',
     
     /* Total hours worked by the rider 1 from Date 2 to Date 3 */
-    get_total_work_hour:'SELECT sum(start_time-end_time) FROM WorkInterval WHERE date BETWEEN $2 AND $3 and rId = $1'
+    get_total_work_hour:'SELECT sum(start_time-end_time) FROM WorkInterval WHERE date BETWEEN $2 AND $3 and rId = $1',
 
 
+    /* Delete customer */
+    delete_customer: 'DELETE FROM Customers WHERE cid=$1',
     
     
 }

@@ -89,7 +89,7 @@ startDate Date NOT NULL,
 endDate Date,
 discountRate NUMERIC NOT NULL,
 rID INTEGER REFERENCES Restaurants,
-PRIMARY KEY (PId)
+PRIMARY KEY (pId)
 );
 
 CREATE TABLE PromoForCustomer(
