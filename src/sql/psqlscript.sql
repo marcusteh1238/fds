@@ -72,7 +72,7 @@ PRIMARY KEY (categoryId)
  
 CREATE TABLE FoodItems (
 foodItemId  INTEGER,
-foodname VARCHAR(20) NOT NULL,
+foodName VARCHAR(20) NOT NULL,
 price NUMERIC NOT NULL,
 daily_limit INTEGER NOT NULL,
 itemAvailability VARCHAR (1) check (itemAvailability in ('T','F')),
@@ -128,7 +128,7 @@ PRIMARY KEY(oId,fId)
 
 CREATE TABLE WorkInterval(
 rId Integer NOT NULL references DeliveryRiders,
-intervalId  Integer NOT NULL,
+intervalId  Integer NOT NULL,w
 date Date NOT NULL,
 start_time TIME NOT NULL,
 end_time TIME NOT NULL,
@@ -140,26 +140,50 @@ PRIMARY KEY(riderId, intervalId)
 
 
 
--- TRIGGER 1: check food item limit
+-- TRIGGER 1.1: check food item limit before inserting  orderDetails
 CREATE OR REPLACE FUNCTION check_food_limit()
 RETURNS TRIGGER AS $$
-    DECLARE count NUMERIC;
-    DECLARE id Integer;
+	DECLARE 
+		foodName text
     BEGIN
-    SELECT od.fid, sum(fi.quantity) as count FROM FoodItems fi, Orders o, OrderDetails od
-    WHERE NEW.date(timeOrderPlaced) = o.date(timeOrderPlaced) AND
-    o.oid = od.oid AND
-    od.fid = fi.fid; 
-    IF count = fi.daily_limit THEN
-    UPDATE FoodItems SET itemAvailability = 'F' WHERE fid = id;
+		SELECT FoodItems.foodName into foodName FROM FoodItems WHERE FoodItems.foodItemId = NEW.fId and FoodItems.itemAvailability='F';
+        IF foodName is not null THEN
+			RAISE exception 'The Food Item with id % name % is not available for ordering because it has reached its daily maximum', NEW.fId, 
     END IF;
+    RETURN NEW
     END;
     
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS check_new_food_limit ON OrderDetails;
 CREATE TRIGGER check_new_food_limit
-BEFORE INSERT OR UPDATE ON Orders
+BEFORE UPDATE OF quantity or INSERT ON OrderDetails
+FOR EACH ROW 
 EXECUTE PROCEDURE check_food_limit();
+
+-- TRIGGER 1.2: update the status of foodItems into 'F' if it reaches daily limit
+CREATE OR REPLACE FUNCTION update_food_status(){
+RETURN TRIGGER AS $$ 
+	DECLARE totalNumberSold NUMERIC;
+    BEGIN 
+		SELECT sum(fi.quantity) INTO count FROM FoodItems fi, Orders o, OrderDetails od
+		WHERE NEW.date(timeOrderPlaced) = o.date(timeOrderPlaced) AND
+		o.oid = od.oid AND
+		od.fid = fi.fid AND
+		od.fid = NEW.fid; 
+		IF count = fi.daily_limit AND itemAvailability <> 'F' THEN
+		UPDATE FoodItems SET itemAvailability = 'F' WHERE fid = NEW.fid;
+		END IF;
+		RETURN NULL;
+	END;
+$$ LANGUAGE plpgsql
+
+DROP TRIGGER IF EXISTS update_food_status ON OrderDetails;
+CREATE TRIGGER updateLimitTrigger 
+AFTER INSERT OR UPDATE ON OrderDetails
+FOR EACH ROW EXECUTE update_food_status();
+    
+    
 
 -- TRIGGER 2: check minimum order amount
 CREATE OR REPLACE FUNCTION check_minimum()
@@ -201,6 +225,8 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER add_point
 AFTER INSERT ON Orders
 EXECUTE PROCEDURE add_reward_point();
+
+
 --dummy data
 INSERT INTO Customers(cId,username,rewardPoints,joinDate,registeredCreditCard) VALUES(1,'Sade',0,'11/01/2019','5377830405202395'),(2,'Laura',0,'08/22/2020','5499023976889336'),(3,'Bruce',0,'01/02/2021','5117954070692188'),(4,'Kylynn',0,'03/12/2021','5448082263759919'),(5,'Tad',0,'04/03/2019','5382940467214320'),(6,'Nigel',0,'05/07/2019','5225096766781138'),(7,'Nita',0,'07/23/2020','5192549986365057'),(8,'Keelie',0,'09/01/2019','5527789691763594'),(9,'Deirdre',0,'05/26/2020','5109510697360730'),(10,'Celeste',0,'01/12/2020','5130375140838275');
 INSERT INTO Restaurants(RId,RName,minOrderPrice,locationArea,RAddress) VALUES(1,'Maggy',16,'21875','37248'),(2,'Chadwick',12,'624770','10468'),(3,'Beau',15,'48565','25083'),(4,'Hasad',17,'920639','211930'),(5,'Kieran',12,'24503','51963'),(6,'Xander',18,'027649','6082'),(7,'Yeo',16,'63669','P2J 5Y9'),(8,'Leila',16,'GY3L 8JL','7123'),(9,'Abdul',19,'Z0165','07086'),(10,'Fatima',17,'11964','41182');
