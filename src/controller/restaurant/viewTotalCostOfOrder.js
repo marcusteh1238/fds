@@ -1,10 +1,10 @@
 const db = require('../../db')
-const { get_total_cost_of_all_orders } = require('../../sql/sqlScript')
+const { get_total_cost_of_completed_Order_by_restaurants_id } = require('../../sql/sqlScript')
 
 // Params: none
 // /restaurant/
-async function getTotalCostOfOrder(params) {
-    const response = await db.query(get_total_cost_of_all_orders, [startDate, endDate])
+async function getTotalCostOfOrderImpl(params) {
+    const response = await db.query(get_total_cost_of_completed_Order_by_restaurants_id, [rid, startDate, endDate])
     const { rows, rowCount } = response
     return {
         count: rowCount,
@@ -12,4 +12,4 @@ async function getTotalCostOfOrder(params) {
     }
 }
 
-module.exports.get = getTotalCostOfOrder;
+module.exports.get = getTotalCostOfOrderImpl;

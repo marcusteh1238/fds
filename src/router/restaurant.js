@@ -34,7 +34,7 @@ router.get("/viewMonthlyOrder/:startDate/:endDate", async(req, res) => {
     }
 });
 
-router.get("/viewTotalCostOfOrder/:startDate/:endDate", async(req, res) => {
+router.get("/viewTotalCostOfOrder/:rid/:startDate/:endDate", async(req, res) => {
     try {
         const response = await ViewTotalCostOfOrderController.get(req.params);
         res.status(200).send(response);
@@ -50,7 +50,7 @@ router.get("/viewTotalCostOfOrder/:startDate/:endDate", async(req, res) => {
 
 router.get("/viewTopFiveItems/:rId", async(req, res) => {
     try {
-        const response = awati ViewTopFiveFoodItemsController.get(req.params);
+        const response = await ViewTopFiveFoodItemsController.get(req.params);
         res.status(200).send(response);
     } catch (error) {
         console.log(error);
