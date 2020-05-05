@@ -3,9 +3,8 @@ const router = require('express').Router({ mergeParams: true });
 const controllerPath = "../controller";
 const LoginController = require(`${controllerPath}/fdsmanager/login`);
 const GetMonthlyNewCustomerController = require(`${controllerPath}/fdsmanager/getMonthlyNewCustomer`);
-const GetMonthlyTotalOrderController = require(`${controllerPath}/fdsmanager/getMonthlyTotalOrder`);
-const ViewTotalCostOfAllOrdersController = require(`${controllerPath}/fdsmanager/viewTotalCostOfAallOrders`);
-
+const GetMonthlyTotalOrderController = require(`${controllerPath}/fdsmanager/getMonthlyTotalOrders`);
+const ViewTotalCostOfAllOrdersController = require(`${controllerPath}/fdsmanager/viewTotalCostOfAllOrders`);
 router.get("/login/:username/:password", async(req, res) => {
     try {
         const response = await LoginController.get(req.params);

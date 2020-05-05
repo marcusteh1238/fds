@@ -9,7 +9,7 @@ async function createOrderImpl({cid, address, promoId = ""}) {
     if (rowCount === 0) {
         throw Error("Customer does not exists!");
     }
-    const { rows, rowCount } = await db.query(add_order, [cid, address, promoId]);
+    const { rows } = await db.query(add_order, [cid, address, promoId]);
     return {}; // success
 }
 

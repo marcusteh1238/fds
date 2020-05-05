@@ -3,8 +3,8 @@ const router = require('express').Router({ mergeParams: true });
 const controllerPath = "../controller";
 const RestaurantListController = require(`${controllerPath}/restaurant/list`);
 const ViewMonthlyOrderController = require(`${controllerPath}/restaurant/viewMonthlyOrder`);
-const ViewTotalCostOfOrderController = require(`@{controllerPath}/restaurant/viewTotalCostOfOrder`);
-const ViewTopFiveFoodItemsController = require(`@{controllerPath}/restaurant/viewTopFiveFoodItems`);
+const ViewTotalCostOfOrderController = require(`${controllerPath}/restaurant/viewTotalCostOfOrder`);
+const ViewTopFiveFoodItemsController = require(`${controllerPath}/restaurant/viewTopFiveFoodItems`);
 
 router.get("/list", async(req, res) => {
     try {
