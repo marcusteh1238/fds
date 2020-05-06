@@ -99,13 +99,14 @@ PRIMARY KEY (pId)
 
 CREATE TABLE Orders(
 oId INTEGER NOT NULL,
+rid INTEGER NOT NULL REFERENCES Restaurants,
 cId INTEGER REFERENCES Customers,
 riderId INTEGER REFERENCES DeliveryRiders (rId),
 address VARCHAR(20) NOT NULL,
 rating INTEGER DEFAULT 5 check (rating>=0 and rating <=5),
 reviews VARCHAR(50),
 pId INTEGER REFERENCES Promo,
-timeOrderPlaced Date not null,
+timeOrderPlaced Date NOT NULL,
 timeRiderDepartsToCollect Date ,
 timeRiderArrivesRes Date ,
 timeRiderDepartsRes Date ,
