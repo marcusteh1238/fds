@@ -21,6 +21,7 @@ module.exports = {
     get_top_5_favourite_foodItem_by_restaurants_id: 'WITH X AS(SELECT * FROM FoodItems f WHERE f.rId = $1), Y AS (SELECT f.fId, sum(quantity) FROM X f JOIN OrderDetails od on f.foodItemId = od.fId order by f.fId Desc limit 5',
     get_orders_by_date: 'SELECT * FROM Orders WHERE timeRiderDeliversOrder IS BETWEEN $1 AND $2',
     get_all_restaurants: 'SELECT * FROM Restaurants',
+    get_restaurant: 'SELECT * FROM Restaurants WHERE rid = $1',
     get_promo: 'SELECT * FROM Promo WHERE pid = $1',
 
     get_rider_login: 'SELECT * FROM DeliveryRiders dr WHERE dr.username = $1 AND dr.password = $2',
@@ -50,7 +51,7 @@ module.exports = {
 
     update_FoodItem_DailyLimit: 'UPDATE FoodItems SET daily_limit = $1 WHERE foodItemId = $2',
     check_rid_food_item: 'SELECT 1 FROM FoodItems WHERE rid = $1 and foodItemId = $2',
-    update_Min_Amount: 'UPDATE Restuarants SET minOrderPrice = $1 WHERE rId = $2',
+    update_Min_Amount: 'UPDATE Restaurants SET minOrderPrice = $1 WHERE rId = $2',
     update_FoodItem: 'UPDATE FoodItems SET foodName=$1, price=$2, daily_limit=$3, categoryId=$4 WHERE foodItemId=$5',
     update_FoodItem_Availability: 'UPDATE FoodItems SET itemAvailability = $1 WHERE foodItemId=$2',
     update_Customer_By_cid: 'UPDATE Customers SET username = $1, password = $2, rewardPoints = $3, registeredCreditCard = $4 WHERE cid = $5',
