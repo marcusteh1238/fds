@@ -8,8 +8,6 @@ module.exports = {
     add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME))',
     add_promo: 'INSERT INTO Promo(startDate, endDate, discountDate,rId) VALUES($1,$2,$3,$4)',
 
-
-
     // retrieve
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
     get_customer_by_cid: 'SELECT * FROM Customers WHERE cid = $1',
@@ -23,6 +21,7 @@ module.exports = {
     get_top_5_favourite_foodItem_by_restaurants_id: 'WITH X AS(SELECT * FROM FoodItems f WHERE f.rId = $1), Y AS (SELECT f.fId, sum(quantity) FROM X f JOIN OrderDetails od on f.foodItemId = od.fId order by f.fId Desc limit 5',
     get_orders_by_date: 'SELECT * FROM Orders WHERE timeRiderDeliversOrder IS BETWEEN $1 AND $2',
     get_all_restaurants: 'SELECT * FROM Restaurants',
+    get_promo: 'SELECT * FROM Promo WHERE pid = $1',
 
     get_rider_login: 'SELECT * FROM DeliveryRiders dr WHERE dr.username = $1 AND dr.password = $2',
     get_FDS_Manager_login: 'SELECT * FROM FDSManagers fm WHERE fm.username = $1 AND fm.password = $2',
@@ -33,7 +32,19 @@ module.exports = {
 
     /* View total number of orders for each month */
     get_total_new_orders_for_each_month: 'SELECT count(*) FROM Orders o WHERE o.timeOrderPlaced >= $1 AND o.timeOrderPlaced < $2',
-
+    get_avg_orders_received_during_campaign: 
+    `WITH filtered AS (
+        SELECT COUNT(*), timeorderplaced::date as date FROM Orders
+        WHERE rid = $1 AND timeorderplaced BETWEEN $2 AND $3
+        GROUP BY date
+    )
+    SELECT CASE WHEN AVG(count) IS NULL
+        THEN 0
+        ELSE AVG(count) END AS average
+    FROM filtered`,
+    get_orders_received_during_campaign_per_day: `SELECT COUNT(*), timeorderplaced::date as date FROM Orders
+    WHERE rid = $1 AND timeorderplaced BETWEEN $2 AND $3
+    GROUP BY timeorderplaced::date`,
 
     // update
 
