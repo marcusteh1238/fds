@@ -10,13 +10,13 @@ DROP TABLE IF EXISTS RestaurantsStaff CASCADE;
 DROP TABLE IF EXISTS fdsmanagers CASCADE;
 DROP TABLE IF EXISTS DeliveryRiders CASCADE;
 DROP TABLE IF EXISTS WorkInterval CASCADE;
-DROP TABLE IF EXISTS employmenttype CASCADE;
+DROP TABLE IF EXISTS Employmenttype CASCADE;
 
 
 CREATE TABLE Customers(
 cId INTEGER NOT NULL,
-username VARCHAR(10),
-password VARCHAR(10),
+username VARCHAR(10) UNIQUE NOT NULL,
+password VARCHAR(10) NOT NULL,
 rewardPoints INTEGER DEFAULT 0,
 joinDate Date NOT NULL,
 registeredCreditCard VARCHAR(16),
@@ -34,18 +34,19 @@ username VARCHAR(10) NOT NULL,
 password VARCHAR(10) NOT NULL,
 PRIMARY KEY(username)
 );
+
 CREATE TABLE Restaurants (
 RId INTEGER,
-RName VARCHAR(50) NOT NULL,
-minOrderPrice NUMERIC NOT NULL,
+RName VARCHAR(50) UNIQUE NOT NULL,
+minOrderPrice NUMERIC NOT NULL check (minOrderPrice>0) ,
 locationArea VARCHAR(30) NOT NULL,
 RAddress VARCHAR(100) NOT NULL,
 PRIMARY KEY (RId)
 );
 
-CREATE TABLE employmentType(
+CREATE TABLE EmploymentType(
 employmentTypeId INTEGER NOT NULL,
-employmentType VARCHAR(10) NOT NULL,
+employmentTypeName VARCHAR(10) UNIQUE NOT NULL,
 baseSalary NUMERIC NOT NULL,
 perOrderSalary NUMERIC NOT NULL,
 PRIMARY KEY(employmentTypeId)
@@ -58,18 +59,17 @@ name VARCHAR(10) NOT NULL,
 phoneNo INTEGER NOT NULL,
 password VARCHAR(10) NOT NULL,
 startDate Date NOT NULL,
-employmentTypeId INTEGER references employmentType,
+employmentTypeId INTEGER references employmentType(employmentTypeId),
 PRIMARY KEY (rId)
 );
 
 
-
-
 CREATE TABLE FoodItemCategories (
 categoryId INTEGER,
-name VARCHAR(20) NOT NULL,
+name VARCHAR(20) NOT NULL UNIQUE,
 PRIMARY KEY (categoryId)
 );
+ 
  
 CREATE TABLE FoodItems (
 foodItemId  INTEGER,
@@ -86,26 +86,23 @@ PRIMARY KEY (foodItemId)
 
 CREATE TABLE Promo (
 pId INTEGER,
+promoName VARCHAR(20) NOT NULL,
 startDate Date NOT NULL,
-endDate Date,
+endDate Date NOT NULL,
 discountRate NUMERIC NOT NULL,
 rID INTEGER REFERENCES Restaurants,
+cId Integer REFERENCES Customers,
 PRIMARY KEY (pId)
 );
 
-CREATE TABLE PromoForCustomer(
-pId INTEGER REFERENCES Promo,
-cId INTEGER REFERENCES Customers,
-expirationDate Date NOT NULL,
-PRIMARY KEY(pId,cId)
-);
+
 
 CREATE TABLE Orders(
 oId INTEGER NOT NULL,
 cId INTEGER REFERENCES Customers,
 riderId INTEGER REFERENCES DeliveryRiders (rId),
 address VARCHAR(20) NOT NULL,
-rating INTEGER DEFAULT 5,
+rating INTEGER DEFAULT 5 check (rating>=0 and rating <=5),
 reviews VARCHAR(50),
 pId INTEGER REFERENCES Promo,
 timeOrderPlaced Date not null,
@@ -120,8 +117,8 @@ PRIMARY KEY (oId)
 CREATE TABLE OrderDetails(
 oId INTEGER REFERENCES Orders,
 fId INTEGER REFERENCES FoodItems,
-quantity INTEGER NOT NULL,
-specialRequest VARCHAR(30),
+quantity INTEGER NOT NULL check (quantity>0),
+specialRequest VARCHAR(100),
 PRIMARY KEY(oId,fId)
 );
 
@@ -141,7 +138,7 @@ PRIMARY KEY(rId, intervalId)
 
 
 
--- TRIGGER 1.1: check food item limit before inserting  orderDetails
+-- TRIGGER 1.1: check food item limit before inserting orderDetails
 CREATE OR REPLACE FUNCTION check_food_limit()
 RETURNS TRIGGER AS $$
 	DECLARE 
@@ -162,7 +159,7 @@ BEFORE UPDATE OF quantity or INSERT ON OrderDetails
 FOR EACH ROW 
 EXECUTE FUNCTION check_food_limit();
 
--- TRIGGER 1.2: update the status of foodItems into 'F' if it reaches daily limit
+-- TRIGGER 2: update the status of foodItems into 'F' if it reaches daily limit
 CREATE OR REPLACE FUNCTION update_food_status()
 RETURNS TRIGGER AS $$ 
 	DECLARE totalNumberSold NUMERIC;
@@ -187,7 +184,7 @@ EXECUTE FUNCTION update_food_status();
     
     
 
--- TRIGGER 2: check minimum order amount
+-- TRIGGER 3: check minimum order amount
 CREATE OR REPLACE FUNCTION check_minimum()
 RETURNS TRIGGER AS $$
     DECLARE total NUMERIC;
@@ -210,7 +207,7 @@ BEFORE INSERT OR UPDATE ON Orders
 EXECUTE FUNCTION check_minimum();
 
 
--- TRIGGER 3: add reward point to customer after order has been completed
+-- TRIGGER 4: add reward point to customer after order has been completed
 CREATE OR REPLACE FUNCTION add_reward_point()
 RETURNS TRIGGER AS $$
     DECLARE total NUMERIC;
@@ -230,7 +227,7 @@ EXECUTE FUNCTION add_reward_point();
 
 
 --dummy data
-INSERT INTO Customers(cId,username,rewardPoints,joinDate,registeredCreditCard) VALUES(1,'Sade',0,'11/01/2019','5377830405202395'),(2,'Laura',0,'08/22/2020','5499023976889336'),(3,'Bruce',0,'01/02/2021','5117954070692188'),(4,'Kylynn',0,'03/12/2021','5448082263759919'),(5,'Tad',0,'04/03/2019','5382940467214320'),(6,'Nigel',0,'05/07/2019','5225096766781138'),(7,'Nita',0,'07/23/2020','5192549986365057'),(8,'Keelie',0,'09/01/2019','5527789691763594'),(9,'Deirdre',0,'05/26/2020','5109510697360730'),(10,'Celeste',0,'01/12/2020','5130375140838275');
+-- INSERT INTO Customers(cId,username,rewardPoints,joinDate,registeredCreditCard) VALUES(1,'Sade',0,'11/01/2019','5377830405202395'),(2,'Laura',0,'08/22/2020','5499023976889336'),(3,'Bruce',0,'01/02/2021','5117954070692188'),(4,'Kylynn',0,'03/12/2021','5448082263759919'),(5,'Tad',0,'04/03/2019','5382940467214320'),(6,'Nigel',0,'05/07/2019','5225096766781138'),(7,'Nita',0,'07/23/2020','5192549986365057'),(8,'Keelie',0,'09/01/2019','5527789691763594'),(9,'Deirdre',0,'05/26/2020','5109510697360730'),(10,'Celeste',0,'01/12/2020','5130375140838275');
 INSERT INTO Restaurants(RId,RName,minOrderPrice,locationArea,RAddress) VALUES(1,'Maggy',16,'21875','37248'),(2,'Chadwick',12,'624770','10468'),(3,'Beau',15,'48565','25083'),(4,'Hasad',17,'920639','211930'),(5,'Kieran',12,'24503','51963'),(6,'Xander',18,'027649','6082'),(7,'Yeo',16,'63669','P2J 5Y9'),(8,'Leila',16,'GY3L 8JL','7123'),(9,'Abdul',19,'Z0165','07086'),(10,'Fatima',17,'11964','41182');
 -- INSERT INTO RestaurantsStaff(username,password) VALUES('Adara','9808'),('Kasper','1801'),('Philip','3267'),('Alison','3087'),('Tall','6471'),('Deacon','5480'),('Ali','8239'),('Beck','1964'),('Xenos','9717'),('Chris','7723');
 -- INSERT INTO FDSManagers(username,password) VALUES('Tiger','4974'),('Dahlia','9056'),('Lara','9681'),('Ali','3152'),('Iona','3652'),('Clayton','1429'),('Fulton','1588'),('Blair','4301'),('Molly','2595'),('Davis','6345');
