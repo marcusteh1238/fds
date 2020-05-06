@@ -14,13 +14,12 @@ DROP TABLE IF EXISTS EmploymentType CASCADE;
 
 
 CREATE TABLE Customers(
-cId SERIAL INTEGER NOT NULL,
+cId SERIAL PRIMARY KEY,
 username VARCHAR(10) UNIQUE NOT NULL,
 password VARCHAR(10) NOT NULL,
 rewardPoints INTEGER DEFAULT 0,
 joinDate Date NOT NULL,
-registeredCreditCard VARCHAR(16),
-PRIMARY KEY(cId)
+registeredCreditCard VARCHAR(16)
 );
 
 CREATE TABLE RestaurantsStaff(
@@ -36,21 +35,18 @@ PRIMARY KEY(username)
 );
 
 CREATE TABLE Restaurants (
-RId SERIAL INTEGER,
+RId SERIAL PRIMARY KEY,
 RName VARCHAR(50) UNIQUE NOT NULL,
 minOrderPrice NUMERIC NOT NULL check (minOrderPrice>0) ,
 locationArea VARCHAR(30) NOT NULL,
-RAddress VARCHAR(100) NOT NULL,
-PRIMARY KEY (RId)
+RAddress VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE EmploymentType(
-employmentTypeId SERIAL INTEGER NOT NULL,
+employmentTypeId SERIAL PRIMARY KEY,
 employmentTypeName VARCHAR(10) UNIQUE NOT NULL,
 baseSalary NUMERIC NOT NULL,
-perOrderSalary NUMERIC NOT NULL,
-PRIMARY KEY(employmentTypeId)
-
+perOrderSalary NUMERIC NOT NULL
 );
 
 CREATE TABLE DeliveryRiders(
@@ -65,34 +61,31 @@ PRIMARY KEY (rId)
 
 
 CREATE TABLE FoodItemCategories (
-categoryId SERIAL INTEGER,
-name VARCHAR(20) NOT NULL UNIQUE,
-PRIMARY KEY (categoryId)
+categoryId SERIAL PRIMARY KEY,
+name VARCHAR(20) NOT NULL UNIQUE
 );
  
  
 CREATE TABLE FoodItems (
-foodItemId SERIAL INTEGER,
+foodItemId SERIAL PRIMARY KEY,
 foodName VARCHAR(20) NOT NULL,
 price NUMERIC NOT NULL,
 daily_limit INTEGER NOT NULL,
 itemAvailability VARCHAR (1) check (itemAvailability in ('T','F')),
 rId INTEGER REFERENCES Restaurants,
-categoryId INTEGER REFERENCES FoodItemCategories,
-PRIMARY KEY (foodItemId)
+categoryId INTEGER REFERENCES FoodItemCategories
 );
  
 
 
 CREATE TABLE Promo (
-pId INTEGER,
+pId SERIAL PRIMARY KEY,
 promoName VARCHAR(20) NOT NULL,
 startDate Date NOT NULL,
 endDate Date NOT NULL,
 discountRate NUMERIC NOT NULL,
 rID INTEGER REFERENCES Restaurants,
-cId Integer REFERENCES Customers,
-PRIMARY KEY (pId)
+cId Integer REFERENCES Customers
 );
 
 
