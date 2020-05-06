@@ -13,4 +13,4 @@ async function createOrderImpl({cid, address, promoId = ""}) {
     return {}; // success
 }
 
-module.exports.post = createOrderImpl;
+module.exports.put = createOrderImpl;
