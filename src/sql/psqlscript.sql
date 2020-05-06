@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS EmploymentType CASCADE;
 
 
 CREATE TABLE Customers(
-cId INTEGER NOT NULL,
+cId SERIAL INTEGER NOT NULL,
 username VARCHAR(10) UNIQUE NOT NULL,
 password VARCHAR(10) NOT NULL,
 rewardPoints INTEGER DEFAULT 0,
@@ -36,7 +36,7 @@ PRIMARY KEY(username)
 );
 
 CREATE TABLE Restaurants (
-RId INTEGER,
+RId SERIAL INTEGER,
 RName VARCHAR(50) UNIQUE NOT NULL,
 minOrderPrice NUMERIC NOT NULL check (minOrderPrice>0) ,
 locationArea VARCHAR(30) NOT NULL,
@@ -45,7 +45,7 @@ PRIMARY KEY (RId)
 );
 
 CREATE TABLE EmploymentType(
-employmentTypeId INTEGER NOT NULL,
+employmentTypeId SERIAL INTEGER NOT NULL,
 employmentTypeName VARCHAR(10) UNIQUE NOT NULL,
 baseSalary NUMERIC NOT NULL,
 perOrderSalary NUMERIC NOT NULL,
