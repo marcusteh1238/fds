@@ -11,10 +11,11 @@
     * Body params: cid, address, promoId
     * Creates an order.
 * POST: /customer/updateCustomer/:cid
-    * Body params: username, fullName, rewardPoints, registeredCreditCard
+    * Body params (CASE SENSITIVE!): username, password, rewardpoints, registeredcreditcard
     * Updates a customer with the supplied information. Body param keys are optional.
 * POST: /customer/deleteCustomer/:cid
     * Deletes a customer with the specified cid from the database.
+
 ## Rider Routes: /rider
 
 * GET: /rider/login/:username/:password
