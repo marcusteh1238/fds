@@ -5,7 +5,8 @@ const RestaurantListController = require(`${controllerPath}/restaurant/list`);
 const ViewMonthlyOrderController = require(`${controllerPath}/restaurant/viewMonthlyOrder`);
 const ViewTotalCostOfOrderController = require(`${controllerPath}/restaurant/viewTotalCostOfOrder`);
 const ViewTopFiveFoodItemsController = require(`${controllerPath}/restaurant/viewTopFiveFoodItems`);
-
+const GetPromoSummaryController = require(`${controllerPath}/restaurant/getPromoSummary`);
+const GetPromoController = require(`${controllerPath}/restaurant/getPromo`);
 router.get("/list", async(req, res) => {
     try {
         const response = await RestaurantListController.get(req.params);
@@ -51,6 +52,34 @@ router.get("/viewTotalCostOfOrder/:rid/:startDate/:endDate", async(req, res) => 
 router.get("/viewTopFiveItems/:rId", async(req, res) => {
     try {
         const response = await ViewTopFiveFoodItemsController.get(req.params);
+        res.status(200).send(response);
+    } catch (error) {
+        console.log(error);
+        const errorCode = error.statusCode ? error.statusCode: 400;
+        res.status(errorCode).send({
+            msg: error.message,
+            error: error
+        })
+    }
+});
+
+router.get("/getPromoSummary/:pid", async(req, res) => {
+    try {
+        const response = await GetPromoSummaryController.get(req.params);
+        res.status(200).send(response);
+    } catch (error) {
+        console.log(error);
+        const errorCode = error.statusCode ? error.statusCode: 400;
+        res.status(errorCode).send({
+            msg: error.message,
+            error: error
+        })
+    }
+});
+
+router.get("/getPromo/:pid", async(req, res) => {
+    try {
+        const response = await GetPromoController.get(req.params);
         res.status(200).send(response);
     } catch (error) {
         console.log(error);
