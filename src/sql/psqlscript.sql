@@ -65,14 +65,14 @@ PRIMARY KEY (rId)
 
 
 CREATE TABLE FoodItemCategories (
-categoryId INTEGER,
+categoryId SERIAL INTEGER,
 name VARCHAR(20) NOT NULL UNIQUE,
 PRIMARY KEY (categoryId)
 );
  
  
 CREATE TABLE FoodItems (
-foodItemId  INTEGER,
+foodItemId SERIAL INTEGER,
 foodName VARCHAR(20) NOT NULL,
 price NUMERIC NOT NULL,
 daily_limit INTEGER NOT NULL,
