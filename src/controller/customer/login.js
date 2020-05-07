@@ -1,11 +1,11 @@
 const db = require('../../db')
-const { get_customer_by_name } = require('../../sql/sqlScript')
+const { login_customer } = require('../../sql/sqlScript')
 // Params: username, password
 async function loginImpl(params) {
 
-    const { username } = params
+    const { username, password } = params
     
-    const response = await db.query(get_customer_by_name, [username])
+    const response = await db.query(login_customer, [username, password])
     const rows = response.rows;
     if (rows.length < 1) {
         return {

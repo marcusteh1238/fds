@@ -5,11 +5,12 @@ module.exports = {
     add_restaurantsStaff: 'INSERT INTO RestaurantsStaff (username) VALUES ($1)',
     add_fdsManagers: 'INSERT INTO FDSManagers VALUES ($1)',
     add_deliveryDrivers: 'INSERT INTO DeliveryRiders(rId, name, phoneNo, startDate, employmentType) VALUES ($1,$2, $3,CAST (NOW() AS TIME),$5 )',
-    add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME))',
+    add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME)) RETURNING cId',
     add_promo: 'INSERT INTO Promo(startDate, endDate, discountDate,rId) VALUES($1,$2,$3,$4)',
 
     // retrieve
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
+    login_customer: 'SELECT * FROM Customers WHERE username = $1 AND password = $2',
     get_customer_by_cid: 'SELECT * FROM Customers WHERE cid = $1',
     get_food_item_by_category: 'SELECT * FROM FoodItem WHERE categoryId = $1 and rId = $2',
     get_food_item_by_restaurants_id: 'SELECT * FROM FoodItem WHERE rid = $1',
