@@ -42,6 +42,8 @@
 
 * GET: /restaurantstaff/login/:username/:password
     * Check if username and password combo matches
+* POST: /restaurantStaff/:rid/:rstaffId/addFoodItem
+    * Body params: {foodItem: {foodname, price, daily_limit, itemavailability = 'T', category}}
 
 ## Restaurant Routes: /restaurant
 

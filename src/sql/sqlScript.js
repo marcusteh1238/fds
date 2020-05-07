@@ -7,7 +7,8 @@ module.exports = {
     add_deliveryDrivers: 'INSERT INTO DeliveryRiders(rId, name, phoneNo, startDate, employmentType) VALUES ($1,$2, $3,CAST (NOW() AS TIME),$5 )',
     add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME)) RETURNING cId',
     add_promo: 'INSERT INTO Promo(startDate, endDate, discountDate,rId) VALUES($1,$2,$3,$4)',
-    add_order_details: 'INSERT INTO OrderDetails (oid, fid, quantity, specialrequest) VALUES', // values to be appended
+    add_order_details: 'INSERT INTO OrderDetails (oid, rid, fid, quantity, specialrequest) VALUES', // values to be appended
+    add_food_item: 'INSERT INTO FoodItems (foodname, price, daily_limit, itemavailability, rid, categoryid) VALUES ($1, $2, $3, $4, $5, $6)',
 
     // retrieve
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
