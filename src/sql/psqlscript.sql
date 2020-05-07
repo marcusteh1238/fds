@@ -35,11 +35,11 @@ PRIMARY KEY(username)
 );
 
 CREATE TABLE Restaurants (
-RId SERIAL PRIMARY KEY,
-RName VARCHAR(50) UNIQUE NOT NULL,
+rId SERIAL PRIMARY KEY,
+rName VARCHAR(50) UNIQUE NOT NULL,
 minOrderPrice NUMERIC NOT NULL check (minOrderPrice>0) ,
 locationArea VARCHAR(30) NOT NULL,
-RAddress VARCHAR(100) NOT NULL
+rAddress VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE EmploymentType(
@@ -50,13 +50,13 @@ perOrderSalary NUMERIC NOT NULL
 );
 
 CREATE TABLE DeliveryRiders(
-rId INTEGER NOT NULL,
+drId SERIAL NOT NULL,
 name VARCHAR(10) NOT NULL,
 phoneNo INTEGER NOT NULL,
 password VARCHAR(10) NOT NULL,
 startDate Date NOT NULL,
 employmentTypeId INTEGER references employmentType(employmentTypeId),
-PRIMARY KEY (rId)
+PRIMARY KEY (drId)
 );
 
 
@@ -67,13 +67,14 @@ name VARCHAR(20) NOT NULL UNIQUE
  
  
 CREATE TABLE FoodItems (
-foodItemId SERIAL PRIMARY KEY,
+foodItemId SERIAL NOT NULL UNIQUE,
 foodName VARCHAR(20) NOT NULL,
 price NUMERIC NOT NULL,
 daily_limit INTEGER NOT NULL,
 itemAvailability VARCHAR (1) check (itemAvailability in ('T','F')),
 rId INTEGER REFERENCES Restaurants,
-categoryId INTEGER REFERENCES FoodItemCategories
+categoryId INTEGER REFERENCES FoodItemCategories,
+PRIMARY KEY(rId, foodItemId)
 );
  
 
@@ -84,8 +85,8 @@ promoName VARCHAR(20) NOT NULL,
 startDate Date NOT NULL,
 endDate Date NOT NULL,
 discountRate NUMERIC NOT NULL,
-rID INTEGER REFERENCES Restaurants,
-cId Integer REFERENCES Customers
+rID INTEGER REFERENCES Restaurants(rId),
+cId Integer REFERENCES Customers(cId)
 );
 
 
@@ -94,7 +95,7 @@ CREATE TABLE Orders(
 oId INTEGER NOT NULL,
 rid INTEGER NOT NULL REFERENCES Restaurants,
 cId INTEGER REFERENCES Customers,
-riderId INTEGER REFERENCES DeliveryRiders (rId),
+riderId INTEGER REFERENCES DeliveryRiders (drId),
 address VARCHAR(20) NOT NULL,
 rating INTEGER DEFAULT 5 check (rating>=0 and rating <=5),
 reviews VARCHAR(50),
@@ -110,7 +111,7 @@ PRIMARY KEY (oId)
 
 CREATE TABLE OrderDetails(
 oId INTEGER REFERENCES Orders,
-fId INTEGER REFERENCES FoodItems,
+fId INTEGER REFERENCES FoodItems(foodItemId),
 quantity INTEGER NOT NULL check (quantity>0),
 specialRequest VARCHAR(100),
 PRIMARY KEY(oId,fId)
@@ -119,14 +120,14 @@ PRIMARY KEY(oId,fId)
 
 
 CREATE TABLE WorkInterval(
-rId Integer NOT NULL references DeliveryRiders,
+drId Integer NOT NULL references DeliveryRiders(drId),
 intervalId  Integer NOT NULL,
 date Date NOT NULL,
 start_time TIME NOT NULL,
 end_time TIME NOT NULL,
 weekNum INTEGER NOT NULL,
 mwsId INTEGER,
-PRIMARY KEY(rId, intervalId)    
+PRIMARY KEY(drId, intervalId)    
 );
 
 
@@ -196,6 +197,8 @@ RETURNS TRIGGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+
+DROP TRIGGER IF EXISTS check_min_order ON Orders;
 CREATE TRIGGER check_min_order
 BEFORE INSERT OR UPDATE ON Orders
 EXECUTE FUNCTION check_minimum();
@@ -215,6 +218,7 @@ RETURNS TRIGGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS add_point ON Orders;
 CREATE TRIGGER add_point
 AFTER INSERT ON Orders
 EXECUTE FUNCTION add_reward_point();
