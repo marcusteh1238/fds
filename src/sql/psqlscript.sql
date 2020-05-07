@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS FoodItemCategories CASCADE;
 DROP TABLE IF EXISTS FoodItems CASCADE;
 DROP TABLE IF EXISTS Restaurants CASCADE;
 DROP TABLE IF EXISTS Promo CASCADE;
-DROP TABLE IF EXISTS PromoForCustomer CASCADE;
 DROP TABLE IF EXISTS Orders CASCADE;
 DROP TABLE IF EXISTS OrderDetails CASCADE;
 DROP TABLE IF EXISTS Customers CASCADE;
@@ -52,7 +51,7 @@ perOrderSalary NUMERIC NOT NULL
 CREATE TABLE DeliveryRiders(
 drId SERIAL NOT NULL,
 name VARCHAR(10) NOT NULL,
-phoneNo INTEGER NOT NULL,
+phoneNo INTEGER UNIQUE NOT NULL,
 password VARCHAR(10) NOT NULL,
 startDate Date NOT NULL,
 employmentTypeId INTEGER references employmentType(employmentTypeId),
@@ -92,7 +91,7 @@ cId Integer REFERENCES Customers(cId)
 
 
 CREATE TABLE Orders(
-oId INTEGER NOT NULL,
+oId SERIAL NOT NULL,
 rid INTEGER NOT NULL REFERENCES Restaurants,
 cId INTEGER REFERENCES Customers,
 riderId INTEGER REFERENCES DeliveryRiders (drId),
@@ -183,13 +182,19 @@ EXECUTE FUNCTION update_food_status();
 CREATE OR REPLACE FUNCTION check_minimum()
 RETURNS TRIGGER AS $$
     DECLARE total NUMERIC;
-    DECLARE rId Integer;
+    DECLARE minimumAmount NUMERIC;
     BEGIN
-    SELECT r.RId as rId, sum(od.quantity*fi.price) as total FROM FoodItems fi, 
-    Orders o JOIN OrderDetails od USING (oid), Restaurants r
-    WHERE NEW.oid = o.oid AND
-    od.fid = fi.fid;
-    IF total >= r.minOrderPrice THEN
+    SELECT sum(od.quantity*fi.price) INTO total 
+    FROM FoodItems fi, OrderDetails od
+    WHERE od.fid = fi.foodItemId
+    GROUP BY od.oId
+    HAVING od.oId = NEW.oId;
+
+    SELECT r.minOrderPrice INTO minimumAmount
+    FROM Restaurants r
+    WHERE r.rId = NEW.rId;
+
+    IF total >= minimumAmount THEN
     RETURN NEW;
     ELSE RAISE exception 'The order has not reach the minimum order amount';
     END IF;
@@ -199,8 +204,10 @@ $$ LANGUAGE plpgsql;
 
 
 DROP TRIGGER IF EXISTS check_min_order ON Orders;
-CREATE TRIGGER check_min_order
-BEFORE INSERT OR UPDATE ON Orders
+CREATE constraint TRIGGER check_min_order
+AFTER INSERT OR UPDATE ON Orders
+DEFERRABLE INITIALLY DEFERRED 
+FOR EACH ROW
 EXECUTE FUNCTION check_minimum();
 
 
