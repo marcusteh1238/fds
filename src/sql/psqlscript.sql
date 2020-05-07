@@ -162,6 +162,7 @@ RETURNS TRIGGER AS $$
 	DECLARE totalNumberSold NUMERIC;
     DECLARE daily_limit INTEGER;
     DECLARE itemAvailability text;
+    DECLARE selectedFID INTEGER;
     BEGIN 
 		SELECT sum(od.quantity) INTO totalNumberSold FROM FoodItems fi, Orders o, OrderDetails od
 		WHERE o.oid = od.oid AND
@@ -177,9 +178,12 @@ RETURNS TRIGGER AS $$
 		WHERE o.oid = od.oid AND
 		od.fid = fi.foodItemId AND
 		od.fid = NEW.fid;
+
+    select NEW.fId into selectedFID;
       
 		IF totalNumberSold = daily_limit AND itemAvailability <> 'F' THEN
-		UPDATE FoodItems SET itemAvailability = 'F' WHERE foodItemId = NEW.fid;
+		UPDATE FoodItems SET itemAvailability ='F' WHERE foodItemId = selectedFID;
+  
 		END IF;
 		RETURN NULL;
 	END;
@@ -211,7 +215,7 @@ RETURNS TRIGGER AS $$
 
     IF total >= minimumAmount THEN
     RETURN NEW;
-    ELSE RAISE exception 'The order has not reach the minimum order amount';
+    ELSE RAISE exception 'The order amount % has not reach the minimum order amount %',total,minimumAmount ;
     END IF;
     RETURN NULL;    
     END;
@@ -265,7 +269,14 @@ INSERT INTO FoodItemCategories(categoryId,name) VALUES(1,'Chicken'),(2,'Fish'),(
 --  Y AS (SELECT oId, sum(od.quantity*f.price) as sumPerOrder FROM OrderDetails od JOIN FoodItems f on od.fId = f.foodItemId WHERE fId In X ORDER BY oId) 
 --  select sum(sumPerOrder) from Y
 
-INSERT INTO FoodItems(fooditemid, foodname, price, daily_limit, itemavailability, rid, categoryId) VALUES(1, 'ice cream', 1, 100, 'T', 1, 1);
+INSERT INTO FoodItems(fooditemid, foodname, price, daily_limit, itemavailability, rid, categoryId) VALUES(1, 'ice cream', 1, 1, 'T', 1, 1);
+WITH newOid AS (
+        INSERT INTO Orders (cId, rid, address, pId, timeOrderPlaced)
+        VALUES (1,2,'address',null,CAST (NOW() AS DATE))
+        RETURNING oid
+      )
+INSERT INTO OrderDetails (oid, fid, quantity, specialrequest) VALUES ((SELECT newOid.oid FROM newOid), 1, 1, 'None');
+
 WITH newOid AS (
         INSERT INTO Orders (cId, rid, address, pId, timeOrderPlaced)
         VALUES (1,2,'address',null,CAST (NOW() AS DATE))
