@@ -10,7 +10,9 @@
     * Body params: username, rewardPoints, registeredCreditCard
     * Registers a new customer.
 * PUT: /customer/createOrder
-    * Body params: cid, address, promoId, rid
+    * Body params: cid, address, rid, foodItems, *promoId, *specialRequest 
+    * promoId and specialRequest are optional parameters.
+    * schema of foodItems: { foodId1: quantity, foodId2: quantity, ... }
     * Creates an order.
 * POST: /customer/updateCustomer/:cid
     * Body params (CASE SENSITIVE!): username, password, rewardpoints, registeredcreditcard
