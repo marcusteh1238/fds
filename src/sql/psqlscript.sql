@@ -72,13 +72,14 @@ CREATE TABLE FoodItems (
 foodItemId SERIAL NOT NULL UNIQUE,
 foodName VARCHAR(20) NOT NULL,
 price NUMERIC NOT NULL,
+quantity INTEGER NOT NULL DEFAULT 0,
 daily_limit INTEGER NOT NULL,
 itemAvailability VARCHAR (1) check (itemAvailability in ('T','F')),
 rId INTEGER REFERENCES Restaurants,
 categoryId INTEGER REFERENCES FoodItemCategories,
 PRIMARY KEY(rId, foodItemId)
 );
- 
+
 
 
 CREATE TABLE Promo (
