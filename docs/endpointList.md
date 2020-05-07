@@ -4,7 +4,7 @@
     * Check if username and password combo matches
 * GET: /customer/getCustomer/:cid
     * Gets a customer by its customer id
-* GET: /getCustomerOrderHistory/:cid
+* GET: /customer/getCustomerOrderHistory/:cid
     * Gets a customer's all-time order history
 * POST: /customer/addNewCustomer
     * Body params: username, rewardPoints, registeredCreditCard
@@ -22,18 +22,20 @@
 
 * GET: /rider/login/:username/:password
     * Check if username and password combo matches
-* GET: /viewTotalNumberOfOrders/:rid/:startDate/:endDate
+* GET: /rider/viewTotalNumberOfOrders/:rid/:startDate/:endDate
     * View total number of orders made in a time period.
+* GET: /rider/getOrder/:oid
+    * Gets an order from its oid.
 
 ## FDS Manager Routes: /fdsmanager
 
 * GET: /fdsmanager/login/:username/:password
     * Check if username and password combo matches
-* GET: /getMonthlyNewCustomer/:startDate/:endDate
+* GET: /fdsmanager/getMonthlyNewCustomer/:startDate/:endDate
     * Get the number of new customers that joined during a time period.
-* GET: /getMonthlyTotalOrder/:startDate/:endDate
+* GET: /fdsmanager/getMonthlyTotalOrder/:startDate/:endDate
     * Get the total number of orders made during a time period.
-* GET: /viewTotalCostOfAllOrders/:startDate/:endDate
+* GET: /fdsmanager/viewTotalCostOfAllOrders/:startDate/:endDate
     * Get the total cost of all orders made during a time period.
 
 ## Restaurant Staff Routes: /restaurantstaff
@@ -45,22 +47,22 @@
 
 * GET: /restaurant/list
     * List of restaurants
-* GET: /getRestaurant/:rid
+* GET: /restaurant/getRestaurant/:rid
     * Obtain info about a restaurant.
-* GET: /viewMonthlyOrder/:startDate/:endDate
+* GET: /restaurant/viewMonthlyOrder/:startDate/:endDate
     * Views the orders made during a time period.
-* GET: /viewTotalCostOfOrder/:rid/:startDate/:endDate
+* GET: /restaurant/viewTotalCostOfOrder/:rid/:startDate/:endDate
     *  Views the total cost of all orders made for a single restaurant during a time period.
-* GET: /viewTopFiveItems/:rId
+* GET: /restaurant/viewTopFiveItems/:rId
     * Gets the top 5 food items for a restaurant.
-* GET: /getPromo/:pid
+* GET: /restaurant/getPromo/:pid
     * Get basic info about a promo.
-* GET: /getPromoSummary/:pid
+* GET: /restaurant/getPromoSummary/:pid
     * View a summary of the promotion with the given promo id.
-* GET: /getMenu/:rid
+* GET: /restaurant/getMenu/:rid
     * View the restaurant's menu.
-* POST: /updateDailyOrderLimit/:rid/:fooditemid/:newLimit
+* POST: /restaurant/updateDailyOrderLimit/:rid/:fooditemid/:newLimit
     * Body not required.
     * Updates the daily order limit of a particular food item id.
-* POST: /updateMinOrderAmt/:rid/:newMinAmt
+* POST: /restaurant/updateMinOrderAmt/:rid/:newMinAmt
     * Updates the minimum order amount for a restaurant.
