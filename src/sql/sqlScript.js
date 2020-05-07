@@ -5,10 +5,16 @@ module.exports = {
     add_restaurantsStaff: 'INSERT INTO RestaurantsStaff (username) VALUES ($1)',
     add_fdsManagers: 'INSERT INTO FDSManagers VALUES ($1)',
     add_deliveryDrivers: 'INSERT INTO DeliveryRiders(rId, name, phoneNo, startDate, employmentType) VALUES ($1,$2, $3,CAST (NOW() AS TIME),$5 )',
-    add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME)) RETURNING cId',
+    add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME)) RETURNING oId',
     add_promo: 'INSERT INTO Promo(startDate, endDate, discountDate,rId) VALUES($1,$2,$3,$4)',
     add_order_details: 'INSERT INTO OrderDetails (oid, rid, fid, quantity, specialrequest) VALUES', // values to be appended
     add_food_item: 'INSERT INTO FoodItems (foodname, price, daily_limit, itemavailability, rid, categoryid) VALUES ($1, $2, $3, $4, $5, $6)',
+    add_order_with_details_transaction: `WITH newOid AS (
+        INSERT INTO Orders (cId, rid, address, pId, timeOrderPlaced) 
+        VALUES ($1,$2,$3,$4,CAST (NOW() AS DATE)) 
+        RETURNING oid
+      )
+      INSERT INTO OrderDetails (oid, fid, quantity, specialrequest) VALUES $VALUES$`,
 
     // retrieve
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
