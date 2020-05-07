@@ -10,7 +10,9 @@
     * Body params: username, rewardPoints, registeredCreditCard
     * Registers a new customer.
 * PUT: /customer/createOrder
-    * Body params: cid, address, promoId, rid
+    * Body params: cid, address, rid, foodItems, *promoId, *specialRequest 
+    * promoId and specialRequest are optional parameters.
+    * schema of foodItems: { foodId1: quantity, foodId2: quantity, ... }
     * Creates an order.
 * POST: /customer/updateCustomer/:cid
     * Body params (CASE SENSITIVE!): username, password, rewardpoints, registeredcreditcard
@@ -26,6 +28,12 @@
     * View total number of orders made in a time period.
 * GET: /rider/getOrder/:oid
     * Gets an order from its oid.
+* GET: /rider/:riderId/updateOrder/accept/:oid
+    * The delivery rider accepts the order.
+* GET: /rider/:riderId/updateOrder/arrived/:oid
+    * The delivery rider has arrived at the restaurant.
+* GET: /rider/:riderId/updateOrder/delivered/:oid
+    * Sets the delivered timestamp to current time, and the delivery is now completed.
 
 ## FDS Manager Routes: /fdsmanager
 
