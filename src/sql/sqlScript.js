@@ -7,6 +7,7 @@ module.exports = {
     add_deliveryDrivers: 'INSERT INTO DeliveryRiders(rId, name, phoneNo, startDate, employmentType) VALUES ($1,$2, $3,CAST (NOW() AS TIME),$5 )',
     add_order: 'INSERT INTO Orders (cId, address,pId,timeOrderPlaced) VALUES ($1,$2,$3,CAST (NOW() AS TIME)) RETURNING cId',
     add_promo: 'INSERT INTO Promo(startDate, endDate, discountDate,rId) VALUES($1,$2,$3,$4)',
+    add_order_details: 'INSERT INTO OrderDetails (oid, fid, quantity, specialrequest) VALUES', // values to be appended
 
     // retrieve
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
@@ -30,6 +31,7 @@ module.exports = {
     get_rider_login: 'SELECT * FROM DeliveryRiders dr WHERE dr.name = $1 AND dr.password = $2',
     get_FDS_Manager_login: 'SELECT * FROM FDSManagers fm WHERE fm.username = $1 AND fm.password = $2',
     get_restaurant_staff_login: 'SELECT * FROM restaurantsstaff rs WHERE rs.username = $1 AND rs.password = $2',
+    get_order_by_oid: 'SELECT * FROM Orders WHERE oid = $1',
 
     /*View total number of new customer for each month */
     get_total_new_customer_for_each_month: 'SELECT count(*) FROM Customers c WHERE c.joinDate BETWEEN $1 AND $2',
@@ -58,7 +60,9 @@ module.exports = {
     update_FoodItem: 'UPDATE FoodItems SET foodName=$1, price=$2, daily_limit=$3, categoryId=$4 WHERE foodItemId=$5',
     update_FoodItem_Availability: 'UPDATE FoodItems SET itemAvailability = $1 WHERE foodItemId=$2',
     update_Customer_By_cid: 'UPDATE Customers SET username = $1, password = $2, rewardPoints = $3, registeredCreditCard = $4 WHERE cid = $5',
-    
+    update_order_status_rider_departs: 'UPDATE Orders SET (riderId, timeriderdepartstocollect) VALUES ($1, CAST NOW() AS TIME) WHERE oid = $2',
+    update_order_status_rider_arrived_restaurant: 'UPDATE Orders SET (timeriderarrivesres) VALUES (CAST NOW() AS TIME) WHERE oid = $1',
+    update_order_status_delivery_success: 'UPDATE Orders SET (timeriderdeliversorder, complete) VALUES (CAST NOW() AS TIME, TRUE) WHERE oid = $1',
 
     /* View total cost of all orders for each month */
     get_total_cost_of_all_orders: 'WITH OrderSubtotal AS (SELECT o.timeRiderDeliversOrder, o.oid, CASE WHEN (o.pid IS NOT NULL) THEN (SELECT od.quantity*fi.price*p.discountRate as subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId) JOIN PROMO p USING (pid)) ELSE (SELECT od.quantity*fi.price as subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId)) END AS subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId) JOIN PROMO p USING (pid)) SELECT sum(subTotal) FROM OrderSubtotal o WHERE o.timeRiderDeliversOrder BETWEEN $1 AND S2',
