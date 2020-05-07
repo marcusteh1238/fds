@@ -12,6 +12,7 @@ module.exports = {
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
     login_customer: 'SELECT * FROM Customers WHERE username = $1 AND password = $2',
     get_customer_by_cid: 'SELECT * FROM Customers WHERE cid = $1',
+    get_customer_all_orders: 'SELECT * FROM Orders WHERE cid = $1', 
     get_food_item_by_category: 'SELECT * FROM FoodItem WHERE categoryId = $1 and rId = $2',
     get_food_item_by_restaurants_id: 'SELECT * FROM FoodItems WHERE rid = $1',
     get_food_item_by_restaurants_name: 'SELECT * FROM FoodItems f WHERE f.rId = (select r.rId FROM Restaurants r where r.name = $1',
