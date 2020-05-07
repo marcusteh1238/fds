@@ -21,11 +21,7 @@ joinDate Date NOT NULL,
 registeredCreditCard VARCHAR(16)
 );
 
-CREATE TABLE RestaurantsStaff(
-username VARCHAR(10) NOT NULL,
-password VARCHAR(10) NOT NULL,
-PRIMARY KEY(username)
-);
+
 
 CREATE TABLE FDSManagers(
 username VARCHAR(10) NOT NULL,
@@ -39,6 +35,13 @@ rName VARCHAR(50) UNIQUE NOT NULL,
 minOrderPrice NUMERIC NOT NULL check (minOrderPrice>0) ,
 locationArea VARCHAR(30) NOT NULL,
 rAddress VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE RestaurantsStaff(
+username VARCHAR(10) NOT NULL,
+password VARCHAR(10) NOT NULL,
+rId INTEGER REFERENCES Restaurants(rId),
+PRIMARY KEY(username)
 );
 
 CREATE TABLE EmploymentType(
