@@ -161,13 +161,13 @@ CREATE OR REPLACE FUNCTION update_food_status()
 RETURNS TRIGGER AS $$ 
 	DECLARE totalNumberSold NUMERIC;
     BEGIN 
-		SELECT sum(fi.quantity) INTO totalNumberSold FROM FoodItems fi, Orders o, OrderDetails od
-		WHERE NEW.date(timeOrderPlaced) = o.date(timeOrderPlaced) AND
+		SELECT sum(od.quantity) INTO totalNumberSold FROM FoodItems fi, Orders o, OrderDetails od
+		WHERE NEW.timeOrderPlaced = o.timeOrderPlaced AND
 		o.oid = od.oid AND
-		od.fid = fi.fid AND
+		od.fid = fi.foodItemId AND
 		od.fid = NEW.fid; 
 		IF totalNumberSold = fi.daily_limit AND itemAvailability <> 'F' THEN
-		UPDATE FoodItems SET itemAvailability = 'F' WHERE fid = NEW.fid;
+		UPDATE FoodItems SET itemAvailability = 'F' WHERE foodItemId = NEW.fid;
 		END IF;
 		RETURN NULL;
 	END;
@@ -243,3 +243,8 @@ INSERT INTO Restaurants(RId,RName,minOrderPrice,locationArea,RAddress) VALUES(1,
 -- INSERT INTO RestaurantsStaff(username,password) VALUES('Adara','9808'),('Kasper','1801'),('Philip','3267'),('Alison','3087'),('Tall','6471'),('Deacon','5480'),('Ali','8239'),('Beck','1964'),('Xenos','9717'),('Chris','7723');
 -- INSERT INTO FDSManagers(username,password) VALUES('Tiger','4974'),('Dahlia','9056'),('Lara','9681'),('Ali','3152'),('Iona','3652'),('Clayton','1429'),('Fulton','1588'),('Blair','4301'),('Molly','2595'),('Davis','6345');
 INSERT INTO FoodItemCategories(categoryId,name) VALUES(1,'Chicken'),(2,'Fish'),(3,'Rice'),(4,'Noodle'),(5,'Drinks');
+
+
+WITH X AS(SELECT oId FROM Orders WHERE rId = $1 ),
+ Y AS (SELECT oId, sum(od.quantity*f.price) as sumPerOrder FROM OrderDetails od JOIN FoodItems f on od.fId = f.foodItemId WHERE fId In X ORDER BY oId) 
+ select sum(sumPerOrder) from Y
