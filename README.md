@@ -3,6 +3,8 @@ Food Delivery Service Application Backend for CS2102 Project.
 
 Built in Node.js using Express JS framework.
 
+![](resources/screenshot1.png)
+
 ## Installation
 
 ### Requirements
