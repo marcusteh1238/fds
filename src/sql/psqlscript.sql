@@ -220,17 +220,20 @@ RETURNS TRIGGER AS $$
     DECLARE total NUMERIC;
     DECLARE customerId Integer;
     BEGIN
-    SELECT sum(od.quantity*fi.price) as total FROM FoodItems fi, 
-    Orders o JOIN OrderDetails od USING (oid), Customers c
-    WHERE NEW.oid = o.oid AND
-    od.fid = fi.foodItemId;
-    UPDATE Customers SET rewardPoints = rewardPoints + CAST(total AS INT) WHERE cId = customerId;
+    SELECT sum(od.quantity*fi.price) INTO total 
+    FROM FoodItems fi, OrderDetails od
+    WHERE od.fid = fi.foodItemId
+    GROUP BY od.oId
+    HAVING od.oId = NEW.oId;
+    UPDATE Customers SET rewardPoints = rewardPoints + CAST(total AS INT) WHERE cId = NEW.cId;
     END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS add_point ON Orders;
-CREATE TRIGGER add_point
+CREATE constraint TRIGGER add_point
 AFTER INSERT ON Orders
+DEFERRABLE INITIALLY DEFERRED 
+FOR EACH ROW
 EXECUTE FUNCTION add_reward_point();
 
 
