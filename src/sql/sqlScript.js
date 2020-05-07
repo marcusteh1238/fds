@@ -13,6 +13,7 @@ module.exports = {
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
     login_customer: 'SELECT * FROM Customers WHERE username = $1 AND password = $2',
     get_customer_by_cid: 'SELECT * FROM Customers WHERE cid = $1',
+
     get_customer_all_orders: 'SELECT * FROM Orders WHERE cid = $1',
     get_food_item_by_category: 'SELECT * FROM FoodItems WHERE categoryId = $1 and rId = $2',
     get_food_item_by_restaurants_id: 'SELECT * FROM FoodItems WHERE rid = $1',
@@ -65,7 +66,7 @@ module.exports = {
     update_order_status_delivery_success: 'UPDATE Orders SET (timeriderdeliversorder, complete) VALUES (CAST NOW() AS TIME, TRUE) WHERE oid = $1',
 
     /* View total cost of all orders for each month */
-    get_total_cost_of_all_orders: 'WITH OrderSubtotal AS (SELECT o.timeRiderDeliversOrder, o.oid, CASE WHEN (o.pid IS NOT NULL) THEN (SELECT od.quantity*fi.price*p.discountRate as subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId) JOIN PROMO p USING (pid)) ELSE (SELECT od.quantity*fi.price as subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId)) END AS subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId) JOIN PROMO p USING (pid)) SELECT sum(subTotal) FROM OrderSubtotal o WHERE o.timeRiderDeliversOrder BETWEEN $1 AND S2',
+    get_total_cost_of_all_orders: 'WITH OrderSubtotal AS (SELECT o.timeRiderDeliversOrder, o.oid, CASE WHEN (o.pid IS NOT NULL) THEN (SELECT od.quantity*fi.price*p.discountRate as subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId) JOIN PROMO p USING (pid)) ELSE (SELECT od.quantity*fi.price as subTotal FROM Orders o JOIN OrderDetails od USING (oid) JOIN FoodItems fi ON (od.fId = fi.foodItemId)) END AS subTotal FROM Orders o ) SELECT sum(subTotal) FROM OrderSubtotal o WHERE o.timeRiderDeliversOrder BETWEEN $1 AND $2',
 
     /* View total number of orders placed for specific hour for specific location area */
 
