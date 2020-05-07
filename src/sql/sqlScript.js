@@ -1,7 +1,7 @@
 module.exports = {
 
     // create customer
-    add_customer: 'INSERT INTO customers (username, password, rewardPoints,registeredCreditCard,joinDate) VALUES($1, $2, $3, $4, CAST (NOW() AS DATE))',
+    add_customer: 'INSERT INTO customers (username, password,registeredCreditCard,joinDate) VALUES($1, $2, $3, CAST (NOW() AS DATE))',
     add_restaurantsStaff: 'INSERT INTO RestaurantsStaff (username) VALUES ($1)',
     add_fdsManagers: 'INSERT INTO FDSManagers VALUES ($1)',
     add_deliveryDrivers: 'INSERT INTO DeliveryRiders(rId, name, phoneNo, startDate, employmentType) VALUES ($1,$2, $3,CAST (NOW() AS TIME),$5 )',
