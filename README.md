@@ -15,7 +15,7 @@ Built in Node.js using Express JS framework.
 1. Clone this repository.
 2. Install the dependencies by doing `npm i` in the root folder.
 
-### Usage
+## Usage
 
 Enter `npm start` to launch the server.
 
