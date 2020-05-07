@@ -8,6 +8,7 @@ const ViewTotalCostOfOrderController = require(`${controllerPath}/restaurant/vie
 const ViewTopFiveFoodItemsController = require(`${controllerPath}/restaurant/viewTopFiveFoodItems`);
 const GetPromoSummaryController = require(`${controllerPath}/restaurant/getPromoSummary`);
 const GetPromoController = require(`${controllerPath}/restaurant/getPromo`);
+const GetMenuController = require(`${controllerPath}/restaurant/getMenu`);
 const UpdateDailyOrderLimitController = require(`${controllerPath}/restaurant/updateDailyOrderLimit`);
 const UpdateMinOrderAmountController = require(`${controllerPath}/restaurant/updateMinOrderAmt`);
 
@@ -98,6 +99,20 @@ router.get("/getPromoSummary/:pid", async(req, res) => {
 router.get("/getPromo/:pid", async(req, res) => {
     try {
         const response = await GetPromoController.get(req.params);
+        res.status(200).send(response);
+    } catch (error) {
+        console.log(error);
+        const errorCode = error.statusCode ? error.statusCode: 400;
+        res.status(errorCode).send({
+            msg: error.message,
+            error: error
+        })
+    }
+});
+
+router.get("/getMenu/:rid", async(req, res) => {
+    try {
+        const response = await GetMenuController.get(req.params);
         res.status(200).send(response);
     } catch (error) {
         console.log(error);

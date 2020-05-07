@@ -7,8 +7,9 @@ const AddNewCustomerController = require(`${controllerPath}/addNewCustomer`);
 const CreateOrderController = require(`${controllerPath}/createOrder`);
 const UpdateCustomerController = require(`${controllerPath}/updateCustomer`);
 const DeleteCustomerController = require(`${controllerPath}/deleteCustomer`);
+const GetOrderHistoryController = require(`${controllerPath}/getOrderHistory`);
 
-router.get("/login/:username", async(req, res) => {
+router.get("/login/:username/:password", async(req, res) => {
     try {
         const response = await CustomerLoginController.get(req.params);
         res.status(200).send(response);
@@ -36,6 +37,20 @@ router.get("/getCustomer/:cid", async(req, res) => {
     }
 });
 
+router.get("/getOrderHistory/:cid", async(req, res) => {
+    try {
+        const response = await GetOrderHistoryController.get(req.params);
+        res.status(200).send(response);
+    } catch (error) {
+        console.error(error);
+        const errorCode = error.statusCode ? error.statusCode : 400;
+        res.status(errorCode).send({
+            msg: error.message,
+            error: error
+        })
+    }
+});
+
 router.post("/addNewCustomer", async(req, res) => {
     try {
         const response = await AddNewCustomerController.post(req.body);
@@ -50,7 +65,7 @@ router.post("/addNewCustomer", async(req, res) => {
     }
 });
 
-router.post("/createOrder", async(req, res) => {
+router.put("/createOrder", async(req, res) => {
     try {
         const response = await CreateOrderController.put(req.body);
         res.status(200).send(response);
