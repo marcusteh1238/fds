@@ -26,6 +26,12 @@
     * View total number of orders made in a time period.
 * GET: /rider/getOrder/:oid
     * Gets an order from its oid.
+* GET: /rider/:riderId/updateOrder/accept/:oid
+    * The delivery rider accepts the order.
+* GET: /rider/:riderId/updateOrder/arrived/:oid
+    * The delivery rider has arrived at the restaurant.
+* GET: /rider/:riderId/updateOrder/delivered/:oid
+    * Sets the delivered timestamp to current time, and the delivery is now completed.
 
 ## FDS Manager Routes: /fdsmanager
 
