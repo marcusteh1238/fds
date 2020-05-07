@@ -19,7 +19,7 @@ module.exports = {
     get_average_rating_by_restaurants_name: 'SELECT avg(rating) FROM Orders WHERE rId = (select r.rId FROM Restaurants r where r.name = $1',
     get_monthly_completed_order_by_restaurants_id: 'SELECT * FROM Orders o WHERE o.timeRiderDeliversOrder IS NOT NULL and o.rid = $1 and o.timeRiderDeliversOrder between $2 and $3',
     get_total_cost_of_completed_Order_by_restaurants_id: 'WITH X AS(SELECT oId FROM Orders WHERE rId = $1 ), Y AS (SELECT oId, sum(od.quantity*f.price) as sumPerOrder FROM OrderDetails od JOIN FoodItems f on od.fId = f.foodItemId WHERE fId In X ORDER BY oId) select sum(sumPerOrder) from Y',
-    get_top_5_favourite_foodItem_by_restaurants_id: 'WITH X AS(SELECT * FROM FoodItems f WHERE f.rId = $1), Y AS (SELECT f.fId, sum(quantity) FROM X f JOIN OrderDetails od on f.foodItemId = od.fId order by f.fId Desc limit 5',
+    get_top_5_favourite_foodItem_by_restaurants_id: 'WITH X AS(SELECT * FROM FoodItems f WHERE f.rId = $1) SELECT f.foodItemId, sum(quantity) as quantity FROM X f JOIN OrderDetails od on f.foodItemId = od.fid GROUP BY f.foodItemId order by quantity Desc limit 5',
     get_orders_by_date: 'SELECT * FROM Orders WHERE timeRiderDeliversOrder IS BETWEEN $1 AND $2',
     get_all_restaurants: 'SELECT * FROM Restaurants',
     get_restaurant: 'SELECT * FROM Restaurants WHERE rid = $1',
