@@ -8,7 +8,7 @@ const CreateOrderController = require(`${controllerPath}/createOrder`);
 const UpdateCustomerController = require(`${controllerPath}/updateCustomer`);
 const DeleteCustomerController = require(`${controllerPath}/deleteCustomer`);
 
-router.get("/login/:username", async(req, res) => {
+router.get("/login/:username/:password", async(req, res) => {
     try {
         const response = await CustomerLoginController.get(req.params);
         res.status(200).send(response);
