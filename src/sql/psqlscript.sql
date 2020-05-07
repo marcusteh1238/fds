@@ -76,7 +76,8 @@ daily_limit INTEGER NOT NULL,
 itemAvailability VARCHAR (1) check (itemAvailability in ('T','F')),
 rId INTEGER REFERENCES Restaurants,
 categoryId INTEGER REFERENCES FoodItemCategories,
-PRIMARY KEY(rId, foodItemId)
+PRIMARY KEY(rId, foodItemId),
+UNIQUE(foodName,rId )
 );
 
 
