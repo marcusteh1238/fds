@@ -1,7 +1,7 @@
 module.exports = {
 
     // create customer
-    add_customer: 'INSERT INTO customers (username, password, rewardPoints,registeredCreditCard,joinDate) VALUES($1, $2, $3, $4, CAST (NOW() AS DATE))',
+    add_customer: 'INSERT INTO customers (username, password,registeredCreditCard,joinDate) VALUES($1, $2, $3, CAST (NOW() AS DATE))',
     add_restaurantsStaff: 'INSERT INTO RestaurantsStaff (username) VALUES ($1)',
     add_fdsManagers: 'INSERT INTO FDSManagers VALUES ($1)',
     add_deliveryDrivers: 'INSERT INTO DeliveryRiders(rId, name, phoneNo, startDate, employmentType) VALUES ($1,$2, $3,CAST (NOW() AS TIME),$5 )',
@@ -12,11 +12,13 @@ module.exports = {
     get_customer_by_name: 'SELECT * FROM Customers WHERE username = $1',
     login_customer: 'SELECT * FROM Customers WHERE username = $1 AND password = $2',
     get_customer_by_cid: 'SELECT * FROM Customers WHERE cid = $1',
+    
     get_food_item_by_category: 'SELECT * FROM FoodItems WHERE categoryId = $1 and rId = $2',
-    get_food_item_by_restaurants_id: 'SELECT * FROM FoodItem WHERE rid = $1',
+    get_food_item_by_restaurants_id: 'SELECT * FROM FoodItems WHERE rid = $1',
     get_food_item_by_restaurants_name: 'SELECT * FROM FoodItems f WHERE f.rId = (select r.rId FROM Restaurants r where r.rname = $1)',
     get_reviews_by_restaurants_name: 'SELECT reviews FROM Orders WHERE rId = (select r.rId FROM Restaurants r where r.rname = $1)',
     get_average_rating_by_restaurants_name: 'SELECT avg(rating) FROM Orders WHERE rId = (select r.rId FROM Restaurants r where r.rname = $1)',
+
     get_monthly_completed_order_by_restaurants_id: 'SELECT * FROM Orders o WHERE o.timeRiderDeliversOrder IS NOT NULL and o.rid = $1 and o.timeRiderDeliversOrder between $2 and $3',
     get_total_cost_of_completed_Order_by_restaurants_id: 'WITH X AS(SELECT oId FROM Orders WHERE rId = $1 ), Y AS (SELECT oId, sum(od.quantity*f.price) as sumPerOrder FROM OrderDetails od JOIN FoodItems f on od.fId = f.foodItemId WHERE fId In X ORDER BY oId) select sum(sumPerOrder) from Y',
     get_top_5_favourite_foodItem_by_restaurants_id: 'WITH X AS(SELECT * FROM FoodItems f WHERE f.rId = $1) SELECT f.foodItemId, sum(quantity) as quantity FROM X f JOIN OrderDetails od on f.foodItemId = od.fid GROUP BY f.foodItemId order by quantity Desc limit 5',

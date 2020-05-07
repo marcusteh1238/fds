@@ -5,10 +5,10 @@
 * GET: /customer/getCustomer/:cid
     * Gets a customer by its customer id
 * POST: /customer/addNewCustomer
-    * Body params: username, fullName, rewardPoints, registeredCreditCard
+    * Body params: username, rewardPoints, registeredCreditCard
     * Registers a new customer.
 * PUT: /customer/createOrder
-    * Body params: cid, address, promoId
+    * Body params: cid, address, promoId, rid
     * Creates an order.
 * POST: /customer/updateCustomer/:cid
     * Body params (CASE SENSITIVE!): username, password, rewardpoints, registeredcreditcard
@@ -20,11 +20,19 @@
 
 * GET: /rider/login/:username/:password
     * Check if username and password combo matches
+* GET: /viewTotalNumberOfOrders/:rid/:startDate/:endDate
+    * View total number of orders made in a time period.
 
 ## FDS Manager Routes: /fdsmanager
 
 * GET: /fdsmanager/login/:username/:password
     * Check if username and password combo matches
+* GET: /getMonthlyNewCustomer/:startDate/:endDate
+    * Get the number of new customers that joined during a time period.
+* GET: /getMonthlyTotalOrder/:startDate/:endDate
+    * Get the total number of orders made during a time period.
+* GET: /viewTotalCostOfAllOrders/:startDate/:endDate
+    * Get the total cost of all orders made during a time period.
 
 ## Restaurant Staff Routes: /restaurantstaff
 
@@ -35,3 +43,22 @@
 
 * GET: /restaurant/list
     * List of restaurants
+* GET: /getRestaurant/:rid
+    * Obtain info about a restaurant.
+* GET: /viewMonthlyOrder/:startDate/:endDate
+    * Views the orders made during a time period.
+* GET: /viewTotalCostOfOrder/:rid/:startDate/:endDate
+    *  Views the total cost of all orders made for a single restaurant during a time period.
+* GET: /viewTopFiveItems/:rId
+    * Gets the top 5 food items for a restaurant.
+* GET: /getPromo/:pid
+    * Get basic info about a promo.
+* GET: /getPromoSummary/:pid
+    * View a summary of the promotion with the given promo id.
+* GET: /getMenu/:rid
+    * View the restaurant's menu.
+* POST: /updateDailyOrderLimit/:rid/:fooditemid/:newLimit
+    * Body not required.
+    * Updates the daily order limit of a particular food item id.
+* POST: /updateMinOrderAmt/:rid/:newMinAmt
+    * Updates the minimum order amount for a restaurant.
