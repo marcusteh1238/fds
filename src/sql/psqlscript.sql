@@ -96,17 +96,17 @@ cId Integer REFERENCES Customers(cId)
 CREATE TABLE Orders(
 oId SERIAL NOT NULL,
 rid INTEGER NOT NULL REFERENCES Restaurants,
-cId INTEGER REFERENCES Customers,
+cId INTEGER NOT NULL REFERENCES Customers,
 riderId INTEGER REFERENCES DeliveryRiders (drId),
 address VARCHAR(20) NOT NULL,
 rating INTEGER DEFAULT 5 check (rating>=0 and rating <=5),
 reviews VARCHAR(50),
 pId INTEGER REFERENCES Promo,
-timeOrderPlaced Date NOT NULL,
-timeRiderDepartsToCollect Date ,
-timeRiderArrivesRes Date ,
-timeRiderDepartsRes Date ,
-timeRiderDeliversOrder Date ,
+timeOrderPlaced TIMESTAMP NOT NULL,
+timeRiderDepartsToCollect TIMESTAMP ,
+timeRiderArrivesRes TIMESTAMP ,
+timeRiderDepartsRes TIMESTAMP ,
+timeRiderDeliversOrder TIMESTAMP ,
 complete boolean DEFAULT FALSE,
 PRIMARY KEY (oId)
 );
@@ -223,7 +223,7 @@ RETURNS TRIGGER AS $$
     SELECT c.cId as customerId, sum(od.quantity*fi.price) as total FROM FoodItems fi, 
     Orders o JOIN OrderDetails od USING (oid), Customers c
     WHERE NEW.oid = o.oid AND
-    od.fid = fi.fid;
+    od.fid = fi.foodItemId;
     UPDATE Customers SET rewardPoints = rewardPoints + CAST(total AS INT) WHERE cId = customerId;
     END;
 $$ LANGUAGE plpgsql;
