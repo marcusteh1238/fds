@@ -38,7 +38,7 @@ async function createOrderImpl({cid, address, promoId = null, rid, foodItems, sp
     console.log('cid, rid, address, promoId: ', cid, rid, address, promoId);
     const res = await db.query(finalQueryString, [cid, rid, address, promoId]);
     
-    return res;
+    return {};
 }
 
 module.exports.put = createOrderImpl;
