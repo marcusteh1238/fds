@@ -239,7 +239,9 @@ RETURNS TRIGGER AS $$
     HAVING od.oId = NEW.oId;
     UPDATE Customers SET rewardPoints = rewardPoints + CAST(total AS INT) WHERE cId = NEW.cId;
     RETURN NULL;
-    END;
+
+    END;   
+
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS add_point ON Orders;
@@ -252,7 +254,8 @@ EXECUTE FUNCTION add_reward_point();
 
 --dummy data
 INSERT INTO Customers(cId,username,password,rewardPoints,joinDate,registeredCreditCard) VALUES (1, 'Mark', 'owowats', 1, '02-02-2020', '1234123412341234');
-INSERT INTO Restaurants(RId,RName,minOrderPrice,locationArea,RAddress) VALUES(1,'Maggy',1,'21875','37248'),(2,'Chadwick',12,'624770','10468'),(3,'Beau',15,'48565','25083'),(4,'Hasad',17,'920639','211930'),(5,'Kieran',12,'24503','51963'),(6,'Xander',18,'027649','6082'),(7,'Yeo',16,'63669','P2J 5Y9'),(8,'Leila',16,'GY3L 8JL','7123'),(9,'Abdul',19,'Z0165','07086'),(10,'Fatima',17,'11964','41182');
+
+INSERT INTO Restaurants(RId,RName,minOrderPrice,locationArea,RAddress) VALUES(1,'Maggy',100,'21875','37248'),(2,'Chadwick',12,'624770','10468'),(3,'Beau',15,'48565','25083'),(4,'Hasad',17,'920639','211930'),(5,'Kieran',12,'24503','51963'),(6,'Xander',18,'027649','6082'),(7,'Yeo',16,'63669','P2J 5Y9'),(8,'Leila',16,'GY3L 8JL','7123'),(9,'Abdul',19,'Z0165','07086'),(10,'Fatima',17,'11964','41182');
 -- INSERT INTO RestaurantsStaff(username,password) VALUES('Adara','9808'),('Kasper','1801'),('Philip','3267'),('Alison','3087'),('Tall','6471'),('Deacon','5480'),('Ali','8239'),('Beck','1964'),('Xenos','9717'),('Chris','7723');
 -- INSERT INTO FDSManagers(username,password) VALUES('Tiger','4974'),('Dahlia','9056'),('Lara','9681'),('Ali','3152'),('Iona','3652'),('Clayton','1429'),('Fulton','1588'),('Blair','4301'),('Molly','2595'),('Davis','6345');
 INSERT INTO FoodItemCategories(categoryId,name) VALUES(1,'Chicken'),(2,'Fish'),(3,'Rice'),(4,'Noodle'),(5,'Drinks');
@@ -269,4 +272,5 @@ WITH newOid AS (
         RETURNING oid
       )
 INSERT INTO OrderDetails (oid, fid, quantity, specialrequest) VALUES ((SELECT newOid.oid FROM newOid), 1, 1, 'None');
+
 
