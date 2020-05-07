@@ -220,7 +220,7 @@ RETURNS TRIGGER AS $$
     DECLARE total NUMERIC;
     DECLARE customerId Integer;
     BEGIN
-    SELECT c.cId as customerId, sum(od.quantity*fi.price) as total FROM FoodItems fi, 
+    SELECT sum(od.quantity*fi.price) as total FROM FoodItems fi, 
     Orders o JOIN OrderDetails od USING (oid), Customers c
     WHERE NEW.oid = o.oid AND
     od.fid = fi.foodItemId;
