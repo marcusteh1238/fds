@@ -4,6 +4,8 @@
     * Check if username and password combo matches
 * GET: /customer/getCustomer/:cid
     * Gets a customer by its customer id
+* GET: /getCustomerOrderHistory/:cid
+    * Gets a customer's all-time order history
 * POST: /customer/addNewCustomer
     * Body params: username, rewardPoints, registeredCreditCard
     * Registers a new customer.
